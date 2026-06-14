@@ -1,60 +1,65 @@
-import './style.css'
-import typescriptLogo from './assets/typescript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.ts'
+// 1. Função auxiliar para limpar a tela
+function ocultarTodasAsTelas(): void {
+  const telas = document.querySelectorAll('.tela');
+  
+  telas.forEach(tela => {
+      (tela as HTMLElement).style.display = 'none';
+  });
+}
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${typescriptLogo}" class="framework" alt="TypeScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.ts</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+// 2. Funções específicas para cada botão do menu
+function abrirTelaHome(): void {
+  ocultarTodasAsTelas();
+  const telaHome = document.getElementById('tela-home');
+  if (telaHome) {
+      telaHome.style.display = 'block';
+  }
+}
 
-<div class="ticks"></div>
+function abrirTelaEstoque(): void {
+  ocultarTodasAsTelas();
+  const telaEstoque = document.getElementById('tela-estoque');
+  if (telaEstoque) {
+      telaEstoque.style.display = 'block';
+  }
+}
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://www.typescriptlang.org" target="_blank">
-          <img class="button-icon" src="${typescriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+function abrirTelaVendas(): void {
+  ocultarTodasAsTelas();
+  const telaVendas = document.getElementById('tela-vendas');
+  if (telaVendas) {
+      telaVendas.style.display = 'block';
+  }
+}
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+function abrirTelaGestao(): void {
+  ocultarTodasAsTelas();
+  const telaGestao = document.getElementById('tela-gestao');
+  if (telaGestao) {
+      telaGestao.style.display = 'block';
+  }
+}
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+let valorTotalPedido: number = 0;
+
+function adicionarAoCarrinho(nomeProduto: string, precoProduto: number): void { //não retorna valores
+    
+  // 1. O TypeScript procura a lista da comanda (a tag <ul>) no HTML
+  const listaDaComanda = document.getElementById('lista-carrinho');
+
+  // 2. Se ele achar a lista, ele injeta um novo <li> com os dados do produto
+  if (listaDaComanda) {
+      listaDaComanda.innerHTML += `
+          <li style="display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">
+              <span>1x ${nomeProduto}</span>
+              <span>R$ ${precoProduto.toFixed(2)}</span>
+          </li>
+      `;
+
+      valorTotalPedido += precoProduto;
+      const botaoFechar = document.getElementById('btn-fechar-venda');
+        if (botaoFechar) {
+            botaoFechar.innerText = `FECHAR R$ ${valorTotalPedido.toFixed(2)}`;
+    }
+  }
+}
