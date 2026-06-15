@@ -63,3 +63,47 @@ function adicionarAoCarrinho(nomeProduto: string, precoProduto: number): void { 
     }
   }
 }
+
+// ==========================================
+// MÓDULO DE ESTOQUE E RECEITAS (Dia 14/06)
+// ==========================================
+
+let custoTotalReceita: number = 0;
+
+function adicionarIngredienteReceita(): void {
+    // 1. Pega os elementos do HTML
+    const selectIngrediente = document.getElementById('select-ingrediente') as HTMLSelectElement;
+    const inputQtd = document.getElementById('input-qtd-ingrediente') as HTMLInputElement;
+    const listaIngredientes = document.getElementById('lista-ingredientes-receita');
+    const inputCusto = document.getElementById('input-custo-receita') as HTMLInputElement;
+
+    const nomeIngrediente = selectIngrediente.options[selectIngrediente.selectedIndex].text;
+    const quantidade = parseFloat(inputQtd.value);
+
+    // 2. Verifica se o usuário digitou uma quantidade válida
+    if (nomeIngrediente !== "Selecione..." && !isNaN(quantidade) && listaIngredientes) {
+        
+        // Coloca o ingrediente na listinha visual
+        listaIngredientes.innerHTML += `
+            <li style="border-bottom: 1px dashed #ccc; padding-bottom: 5px; margin-bottom: 5px;">
+                - ${quantidade} Kg de ${nomeIngrediente}
+            </li>
+        `;
+
+        // Faz uma simulação de custo (Ex: Vamos fingir que tudo custa R$ 5,00 o Quilo)
+        const custoDesteIngrediente = quantidade * 5.00; 
+        custoTotalReceita += custoDesteIngrediente;
+
+        // Atualiza o campo cinza travado com o valor matemático
+        if (inputCusto) {
+            inputCusto.value = `Custo Calculado: R$ ${custoTotalReceita.toFixed(2)}`;
+        }
+
+        // Limpa a caixinha de número para o próximo ingrediente
+        inputQtd.value = '';
+    }
+}
+
+function cadastrarReceita(): void {
+    alert("Nova receita salva com sucesso no sistema!");
+}
