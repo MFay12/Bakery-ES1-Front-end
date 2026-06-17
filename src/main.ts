@@ -1,18 +1,18 @@
-// 1. Função auxiliar para limpar a tela
+//Função auxiliar para limpar a tela
 function ocultarTodasAsTelas(): void {
-  const telas = document.querySelectorAll('.tela');
+  const telas = document.querySelectorAll('.tela'); //Pega todas as class telas (ex: Tela-Home)
   
-  telas.forEach(tela => {
+  telas.forEach(tela => {   // Para cada tela deixe invisível
       (tela as HTMLElement).style.display = 'none';
   });
 }
 
-// 2. Funções específicas para cada botão do menu
+//Funções específicas para cada botão do menu
 function abrirTelaHome(): void {
   ocultarTodasAsTelas();
   const telaHome = document.getElementById('tela-home');
-  if (telaHome) {
-      telaHome.style.display = 'block';
+  if (telaHome) {   
+      telaHome.style.display = 'block'; 
   }
 }
 
@@ -49,7 +49,7 @@ function abrirTelaGestao(): void {
 let custoTotalReceita: number = 0;
 
 function adicionarIngredienteReceita(): void {
-    // 1. Pega os elementos do HTML
+    // Pega os elementos do HTML
     const selectIngrediente = document.getElementById('select-ingrediente') as HTMLSelectElement;
     const inputQtd = document.getElementById('input-qtd-ingrediente') as HTMLInputElement;
     const listaIngredientes = document.getElementById('lista-ingredientes-receita');
@@ -58,21 +58,21 @@ function adicionarIngredienteReceita(): void {
     const nomeIngrediente = selectIngrediente.options[selectIngrediente.selectedIndex].text;
     const quantidade = parseFloat(inputQtd.value);
 
-    // 2. Verifica se o usuário digitou uma quantidade válida
-    if (nomeIngrediente !== "Selecione..." && !isNaN(quantidade) && listaIngredientes) {
+    // Verifica se o usuário digitou uma quantidade válida
+    if (nomeIngrediente !== "Selecione..." && !isNaN(quantidade) && listaIngredientes) { 
         
-        // Coloca o ingrediente na listinha visual
+        // Coloca o ingrediente na lista visual
         listaIngredientes.innerHTML += `
             <li style="border-bottom: 1px dashed #ccc; padding-bottom: 5px; margin-bottom: 5px;">
                 - ${quantidade} Kg de ${nomeIngrediente}
             </li>
         `;
 
-        // Faz uma simulação de custo (Ex: Vamos fingir que tudo custa R$ 5,00 o Quilo)
+        // Faz uma simulação de custo (Ex:Tudo custa R$ 5,00 o Quilo)
         const custoDesteIngrediente = quantidade * 5.00; 
         custoTotalReceita += custoDesteIngrediente;
 
-        // Atualiza o campo cinza travado com o valor matemático
+        // Atualiza o campo cinza travado com o valor matemático. Verifica se o HTML foi carregado
         if (inputCusto) {
             inputCusto.value = `Custo Calculado: R$ ${custoTotalReceita.toFixed(2)}`;
         }
@@ -91,18 +91,18 @@ function cadastrarReceita(): void {
 // ==========================================
 
 function calcularProjecao(): void {
-  const inputQtd = document.getElementById('input-projecao-qtd') as HTMLInputElement;
-  const resultadoDiv = document.getElementById('resultado-projecao');
+  const inputQtd = document.getElementById('input-projecao-qtd') as HTMLInputElement; //Pega o valor digitado
+  const resultadoDiv = document.getElementById('resultado-projecao'); //Pega a div de resultado
   
-  // Pega o número que o Gestor digitou
+  // Pega o número que o Gestor digitou e transforma em integer
   const qtdPaes = parseInt(inputQtd.value);
 
   if (!isNaN(qtdPaes) && qtdPaes > 0 && resultadoDiv) {
       
-      // REGRA DE NEGÓCIO: Simulando que 1 pão francês gasta 0.05Kg (50 gramas) de farinha
+      // Simulando que 1 pão francês gasta 0.05Kg (50 gramas) de farinha
       const farinhaNecessaria = qtdPaes * 0.05; 
       
-      // Pegando o valor que fingimos ter no estoque na tela anterior
+      // Pegando o valor fictício ter no estoque na tela anterior
       const farinhaEmEstoque = 50; 
       //Constante com valor booleano da comparação
       const vaiFaltar = farinhaNecessaria > farinhaEmEstoque;
@@ -113,14 +113,14 @@ function calcularProjecao(): void {
       if (vaiFaltar) {
           const quantidadeFaltante = farinhaNecessaria - farinhaEmEstoque;
           resultadoDiv.innerHTML = `
-              <h4 style="color: #e74c3c; margin-bottom: 10px;">⚠️ Atenção: Estoque Insuficiente</h4>
+              <h4 style="color: #e74c3c; margin-bottom: 10px;"> Atenção: Estoque Insuficiente</h4>
               <p style="font-size: 0.9rem; color: #333;">Para fazer ${qtdPaes} pães, você precisa de <strong>${farinhaNecessaria}Kg</strong> de farinha.</p>
               <p style="font-size: 0.9rem; color: #333;">Estoque atual: <strong>${farinhaEmEstoque}Kg</strong>.</p>
               <p style="font-size: 0.9rem; color: #e74c3c; margin-top: 5px;"><strong>Faltam ${quantidadeFaltante.toFixed(2)}Kg para a fornada!</strong></p>
           `;
       } else {
           resultadoDiv.innerHTML = `
-              <h4 style="color: #2ecc71; margin-bottom: 10px;">✅ Estoque Suficiente</h4>
+              <h4 style="color: #2ecc71; margin-bottom: 10px;"> Estoque Suficiente</h4>
               <p style="font-size: 0.9rem; color: #333;">Para fazer ${qtdPaes} pães, você gasta <strong>${farinhaNecessaria}Kg</strong> de farinha.</p>
               <p style="font-size: 0.9rem; color: #333;">Estoque atual: <strong>${farinhaEmEstoque}Kg</strong>.</p>
               <p style="font-size: 0.9rem; color: #2ecc71; margin-top: 5px;"><strong>Pode iniciar a produção tranquilamente.</strong></p>
@@ -142,13 +142,16 @@ interface ItemCarrinho {
   quantidade: number;
 }
 
-// 2."memória" do carrinho
+// "memória" do carrinho
 let itensNoCarrinho: ItemCarrinho[] = [];
 let valorTotalPedido: number = 0;
 
 function adicionarAoCarrinho(nomeProduto: string, precoProduto: number): void {
   
-  // Procura na nossa memória se o pão já foi adicionado antes
+  /* Procura na memória se o pão já foi adicionado antes
+  1. O '.find()' é um método que assim que ele acha o item, ele para a busca.
+  2. 'item =>' (Arrow Function): Funciona como um laço de repetição invisível. O sistema 
+    pega cada produto do carrinho, um de cada vez, e temporariamente o chama de 'item'. */
   const itemExistente = itensNoCarrinho.find(item => item.nome === nomeProduto);
 
   if (itemExistente) {
@@ -170,17 +173,18 @@ function adicionarAoCarrinho(nomeProduto: string, precoProduto: number): void {
   atualizarTelaDoCarrinho();
 }
 
-// 3. Função que pega a memória e joga no HTML
+//Função que pega a memória e joga no HTML
 function atualizarTelaDoCarrinho(): void {
-  const listaDaComanda = document.getElementById('lista-carrinho');
-  const botaoFechar = document.getElementById('btn-fechar-venda');
+  const listaDaComanda = document.getElementById('lista-carrinho'); //Pega a div do "lista-carrinho"
+  const botaoFechar = document.getElementById('btn-fechar-venda'); //Pega a div do botão de venda
 
-  if (listaDaComanda) {
-      listaDaComanda.innerHTML = '';
+  if (listaDaComanda) { //Verifica se o HTML carregou
+      listaDaComanda.innerHTML = ''; //Deixa ela invisível primeiro
 
       itensNoCarrinho.forEach(item => {
           const subtotalDoItem = item.quantidade * item.preco;
           
+          //Cria o HTML do resultado
           listaDaComanda.innerHTML += `
               <li style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">
                   <span>${item.quantidade}x ${item.nome}</span>
@@ -203,12 +207,12 @@ function atualizarTelaDoCarrinho(): void {
   }
 }
 
-// 4. Função da Lixeira
+
 function removerDoCarrinho(nomeProduto: string): void {
   // Acha a posição do pão na  memória
-  const index = itensNoCarrinho.findIndex(item => item.nome === nomeProduto);
+  const index = itensNoCarrinho.findIndex(item => item.nome === nomeProduto); //Acha a ref da lista
 
-  if (index !== -1) {
+  if (index !== -1) { //Se a ref for -1 significa que não há itens
       const item = itensNoCarrinho[index];
       
       // Desconta o dinheiro
@@ -227,7 +231,7 @@ function removerDoCarrinho(nomeProduto: string): void {
   }
 }
 
-// 5. Função de Reset do Sistema
+//Função de Reset do Sistema
 function finalizarVenda(): void {
   // Impede o caixa de fechar uma venda sem nada
   if (itensNoCarrinho.length === 0) {
